@@ -1,0 +1,31 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Pupil.Core.Entities;
+using Pupil.Core.Interfaces;
+using System.Threading.Tasks;
+
+namespace Pupil.WebApi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ExamTypeController : ControllerBase
+    {
+        private readonly IExamTypeService _service;
+
+        public ExamTypeController(IExamTypeService service)
+        {
+            _service = service;
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAsync(int id)
+        {
+            var productDetails = await _service.GetByIdAsync(id);
+            return Ok(productDetails);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync(ExamType request)
+        {
+            return Ok(await _service.CreateAsync(request.Tname, request.Tdesc));
+        }
+    }
+}

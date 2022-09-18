@@ -27,5 +27,12 @@ namespace Pupil.WebApi.Controllers
         {
             return Ok(await _service.CreateAsync(request.Tname, request.Tdesc));
         }
+
+        [HttpDelete]
+        public async Task<string> Delete(int id)
+        {
+            await _service.Delete(id);
+            return "Success";
+        }
     }
 }

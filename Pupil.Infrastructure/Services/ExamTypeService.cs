@@ -26,6 +26,8 @@ namespace Pupil.Infrastructure.Services
             return type;
         }
 
+        
+
         public async Task<IReadOnlyList<ExamType>> GetAllAsync()
         {
             return await _context.ExamType.ToListAsync();
@@ -35,7 +37,11 @@ namespace Pupil.Infrastructure.Services
         {
             return await _context.ExamType.FindAsync(id);
         }
+        public async Task Delete(int id)
+        {
+            var type = await _context.ExamType.FindAsync(id);
+            _context.ExamType.Remove(type);
+        }
 
-        
     }
 }

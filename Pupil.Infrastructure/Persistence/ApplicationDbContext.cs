@@ -26,8 +26,20 @@ namespace Pupil.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<ExamType>().HasQueryFilter(a => a.TenantId == TenantId);
-            //modelBuilder.Entity<YourEntityType>(eb =>{eb.HasNoKey();});
+            modelBuilder.Entity<ExamType>(eb => { eb.HasKey(k => k.ExamTypeId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<ClassRoom>(eb => { eb.HasKey(k => k.ClassRoomId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<Course>(eb => { eb.HasKey(k => k.CourseId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<Exam>(eb => { eb.HasKey(k => k.ExamId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<Fee>(eb => { eb.HasKey(k => k.FeeId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<FeeMode>(eb => { eb.HasKey(k=>k.FeeModeId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<FeeStructure>(eb => { eb.HasKey(k => k.FeeStructureId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<Grade>(eb => { eb.HasKey(k => k.GradeId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<Parent>(eb => { eb.HasKey(k => k.ParentId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<Student>(eb => { eb.HasKey(k => k.StudentId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<Teacher>(eb => { eb.HasKey(k => k.TeacherId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<Attendance>(eb => { eb.HasNoKey();eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<ClassRoomStudent>(eb => { eb.HasNoKey(); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<ExamResult>(eb => { eb.HasNoKey(); eb.HasQueryFilter(a => a.TenantId == TenantId); });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

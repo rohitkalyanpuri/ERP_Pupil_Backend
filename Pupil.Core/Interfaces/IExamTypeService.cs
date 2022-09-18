@@ -13,5 +13,7 @@ namespace Pupil.Core.Interfaces
         Task<ExamType> GetByIdAsync(int id);
 
         Task<IReadOnlyList<ExamType>> GetAllAsync();
+
+        Task Delete(int id);
     }
 }

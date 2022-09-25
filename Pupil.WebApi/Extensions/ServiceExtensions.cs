@@ -11,7 +11,8 @@ namespace Pupil.WebApi.Extensions
         public static void ConfigureCors(this IServiceCollection services)
            => services.AddCors(options =>
            {
-               options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+               options.AddPolicy("CorsPolicy", builder =>
+               builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
            });
         //Swagger
         public static void ConfigureSwagger(this IServiceCollection services)
@@ -25,7 +26,8 @@ namespace Pupil.WebApi.Extensions
         {
             services.AddTransient<ITenantService, TenantService>();
             services.AddTransient<IExamTypeService, ExamTypeService>();
-
+            services.AddTransient<IParentService, ParentService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
             return services;
         }
     }

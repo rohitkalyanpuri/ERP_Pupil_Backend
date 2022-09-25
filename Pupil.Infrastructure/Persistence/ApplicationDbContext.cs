@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System;
 
 namespace Pupil.Infrastructure.Persistence
 {
@@ -22,10 +25,13 @@ namespace Pupil.Infrastructure.Persistence
 
         //public DbSet<Product> Products { get; set; }
         public DbSet<ExamType> ExamType  { get; set; }
+        public DbSet<Parent> Parent  { get; set; }
+        public DbSet<Authentication> Authentication { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Authentication>(eb => { eb.HasKey(k => k.AuthId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
             modelBuilder.Entity<ExamType>(eb => { eb.HasKey(k => k.ExamTypeId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
             modelBuilder.Entity<ClassRoom>(eb => { eb.HasKey(k => k.ClassRoomId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
             modelBuilder.Entity<Course>(eb => { eb.HasKey(k => k.CourseId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
@@ -54,7 +60,7 @@ namespace Pupil.Infrastructure.Persistence
                 }
             }
         }
-
+       
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<IMustHaveTenant>().ToList())

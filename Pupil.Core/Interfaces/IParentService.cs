@@ -9,11 +9,11 @@ namespace Pupil.Core.Interfaces
 {
     public interface IParentService
     {
-        Task<ParentDc> CreateAsync(ParentDc parentDc);
-        IEnumerable<ParentDc> GetAllSync();
-        Task<ExamType> GetByIdAsync(int id);
-        Task Delete(int id);
+        Task<SingleResponse<ParentDc>> CreateAsync(ParentDc parentDc);
+        ListResponse<ParentDc> GetAllSync();
+        Task<SingleResponse<ParentDc>> GetByIdAsync(int id);
+        Task<Response> Delete(int id);
 
-        Task<ParentDc> UpdateAsync(ParentDc parentDc);
+        Task<SingleResponse<ParentDc>> UpdateAsync(ParentDc parentDc);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pupil.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace Pupil.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AuthenticationUser(AuthDc request)
+        public async Task<IActionResult> AuthenticateUser(AuthDc request)
         {
             return Ok(await _service.AuthenticateUser(request));
         }

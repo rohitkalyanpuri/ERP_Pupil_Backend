@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pupil.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/parent")]
     [ApiController]
     public class ParentController : ControllerBase
     {
@@ -18,40 +18,32 @@ namespace Pupil.WebApi.Controllers
             _service = service;
         }
 
-        [HttpGet,Route("Getparentslist")]
-        public IActionResult GetParentsList()
+        [HttpGet,Route("getparentslist")]
+        public IActionResult Get()
         {
-            var productDetails =  _service.GetAllSync();
-            return Ok(productDetails);
+            var parents =  _service.GetAllSync();
+            return Ok(parents);
         }
 
-        [HttpPost, Route("Addparent")]
-        public async Task<IActionResult> Addparent(ParentDc parentDc)
+        [HttpPost, Route("addparent")]
+        public async Task<IActionResult> Add(ParentDc parentDc)
         {
             var productDetails = await _service.CreateAsync(parentDc);
             return Ok(productDetails);
         }
 
-        [HttpPut, Route("Editparent")]
-        public async Task<IActionResult> Editparent(ParentDc parentDc)
+        [HttpPut, Route("editparent")]
+        public async Task<IActionResult> Update(ParentDc parentDc)
         {
             var productDetails = await _service.UpdateAsync(parentDc);
             return Ok(productDetails);
         }
 
-        [HttpDelete, Route("Deleteparent/{id:int}")]
+        [HttpDelete, Route("deleteparent/{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _service.Delete(id);
-                return Ok(true);
-            }
-            catch(Exception ex)
-            {
-               return BadRequest();
-            }
-            
+            return Ok(await _service.Delete(id));
+
         }
     }
 }

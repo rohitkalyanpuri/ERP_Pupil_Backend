@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pupil.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/exam")]
     [ApiController]
     public class ExamTypeController : ControllerBase
     {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Pupil.Core.DataContactsEntities;
 using Pupil.Core.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Pupil.WebApi.Controllers
@@ -44,6 +45,12 @@ namespace Pupil.WebApi.Controllers
         {
             return Ok(await _service.Delete(id));
 
+        }
+
+        [HttpPost, Route("importparent")]
+        public async Task<IActionResult> ImportParent(IEnumerable<ParentDc> parentDc)
+        {
+            return Ok(await _service.ImportParents(parentDc));
         }
     }
 }

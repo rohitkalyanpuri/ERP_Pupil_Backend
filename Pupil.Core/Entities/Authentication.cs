@@ -24,5 +24,8 @@ namespace Pupil.Core.Entities
 
         public string UserType { get; set; }
 
+        public int? UserId { get; set; }
+
+        public string RoleType { get; set; }
     }
 }

@@ -207,5 +207,59 @@ namespace Pupil.Infrastructure.Services
 
             return responses;
         }
+
+        public async Task<ListResponse<ParentDc>> ImportParents(IEnumerable<ParentDc> requestObj)
+        {
+            var response = new ListResponse<ParentDc>();
+            List<ParentDc> notInsertedList = new List<ParentDc>();
+            List<Parent> parents = new List<Parent>();
+            try
+            {
+                foreach(var item in requestObj)
+                {
+                    List<KeyValuePair<string, string>> responses = IsParentExist(item);
+                    if (responses.Count > 0)
+                    {
+                        notInsertedList.Add(item);
+                    }
+                    else
+                    {
+                        var tblParent = _mapper.Map<Parent>(item);
+                        parents.Add(tblParent);
+                    }
+                }
+                if(parents.Count > 0)
+                {
+                    await _context.Parent.AddRangeAsync(parents);
+                    _context.SaveChanges();
+                }
+
+                if(notInsertedList.Count > 0)
+                {
+                    response.Data = notInsertedList;
+                    response.Message = "Few records not instrested because Parent already exists in the system. Please find these records in grid.";
+                }
+                else
+                {
+                    response.Data = null;
+                    response.Message = "All records inserted successfully!";
+                }
+
+                if (parents.Count > 0 && notInsertedList.Count > 0)
+                    response.Status = StatusCode.PartiallyImported;
+                else if (parents.Count > 0 && !notInsertedList.Any())
+                    response.Status = StatusCode.Ok;
+                else if (!parents.Any())
+                    response.Status = StatusCode.NotImported;
+            }
+            catch(Exception ex)
+            {
+                response.Status = StatusCode.SystemException;
+                response.Error = ex.Message;
+                response.Data = null;
+                response.Message = AppConstants.ExceptionMessage;
+            }
+            return response;
+        } 
     }
 }

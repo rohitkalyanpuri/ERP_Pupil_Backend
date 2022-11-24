@@ -10,7 +10,9 @@ namespace Pupil.Core.Enums
         Unauthorized = -2,
         Ok=0,
         NoContent=1,
-        AlreadyExists=2
+        AlreadyExists=2,
+        PartiallyImported=3,
+        NotImported=4,
 
     }
 }

@@ -37,6 +37,8 @@ namespace Pupil.Infrastructure.Services
                         authDc.IsAuthenticated = true;
                         authDc.Message = "Success";
                         authDc.UserType = auth.UserType;
+                        authDc.UserId = auth.UserId;
+                        authDc.RoleType = auth.RoleType;
                     } 
                 }
                 else

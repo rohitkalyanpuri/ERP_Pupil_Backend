@@ -15,5 +15,7 @@ namespace Pupil.Core.Interfaces
         Task<Response> Delete(int id);
 
         Task<SingleResponse<ParentDc>> UpdateAsync(ParentDc parentDc);
+
+        Task<ListResponse<ParentDc>> ImportParents(IEnumerable<ParentDc> requestObj);
     }
 }

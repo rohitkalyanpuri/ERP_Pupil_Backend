@@ -237,7 +237,7 @@ namespace Pupil.Infrastructure.Services
                 if(notInsertedList.Count > 0)
                 {
                     response.Data = notInsertedList;
-                    response.Message = "Few records not instrested because Parent already exists in the system. Please find these records in grid.";
+                    response.Message = "Few records not inserted because Parent already exists in the system. Please find these records in grid.";
                 }
                 else
                 {
@@ -245,8 +245,10 @@ namespace Pupil.Infrastructure.Services
                     response.Message = "All records inserted successfully!";
                 }
 
+                //if (parents.Count > 0 && notInsertedList.Count > 0)
+                //    response.Status = StatusCode.PartiallyImported;
                 if (parents.Count > 0 && notInsertedList.Count > 0)
-                    response.Status = StatusCode.PartiallyImported;
+                    response.Status = StatusCode.Ok;
                 else if (parents.Count > 0 && !notInsertedList.Any())
                     response.Status = StatusCode.Ok;
                 else if (!parents.Any())

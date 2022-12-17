@@ -27,6 +27,8 @@ namespace Pupil.Infrastructure.Persistence
         public DbSet<ExamType> ExamType  { get; set; }
         public DbSet<Parent> Parent  { get; set; }
         public DbSet<Student> Student  { get; set; }
+
+        public DbSet<Grade> Grade { get; set; }
         public DbSet<Authentication> Authentication { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

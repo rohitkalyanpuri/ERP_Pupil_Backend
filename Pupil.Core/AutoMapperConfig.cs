@@ -17,6 +17,8 @@ namespace Pupil.Core
 
             CreateMap<StudentDc, Student>().ForMember(c => c.Fname, opt => opt.MapFrom(x => x.FirstName))
                 .ForMember(c => c.Lname, opt => opt.MapFrom(x => x.LastName));
+
+            CreateMap<GradeDc, Grade>();
         }
     }
 }

@@ -31,6 +31,7 @@ namespace Pupil.Infrastructure.Persistence
         public DbSet<Grade> Grade { get; set; }
         public DbSet<Authentication> Authentication { get; set; }
 
+        public DbSet<Division> Division { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -49,6 +50,7 @@ namespace Pupil.Infrastructure.Persistence
             modelBuilder.Entity<Attendance>(eb => { eb.HasNoKey();eb.HasQueryFilter(a => a.TenantId == TenantId); });
             modelBuilder.Entity<ClassRoomStudent>(eb => { eb.HasNoKey(); eb.HasQueryFilter(a => a.TenantId == TenantId); });
             modelBuilder.Entity<ExamResult>(eb => { eb.HasNoKey(); eb.HasQueryFilter(a => a.TenantId == TenantId); });
+            modelBuilder.Entity<Division>(eb => { eb.HasKey(k => k.DivisionId); eb.HasQueryFilter(a => a.TenantId == TenantId); });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

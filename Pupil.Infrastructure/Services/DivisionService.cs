@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Pupil.Core.Constans;
 using Pupil.Core.DataContactsEntities;
+using Pupil.Core.DataTransferObjects;
 using Pupil.Core.Entities;
+using Pupil.Core.Enums;
 using Pupil.Core.Interfaces;
 using Pupil.Infrastructure.Persistence;
 using System;
@@ -9,26 +12,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Pupil.Core.Enums;
-using Pupil.Core.Constans;
-using Pupil.Core.DataTransferObjects;
 
 namespace Pupil.Infrastructure.Services
 {
-    public class GradeService : IGradeService
+    public class DivisionService : IDivisionService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        public GradeService(ApplicationDbContext context, IMapper mapper)
+
+        public DivisionService(ApplicationDbContext context, IMapper mapper)
         {
             _context = context; _mapper = mapper;
         }
-        public async Task<SingleResponse<GradeDc>> CreateAsync(GradeDc requestObj)
+        public async Task<SingleResponse<DivisionDc>> CreateAsync(DivisionDc requestObj)
         {
-            var response = new SingleResponse<GradeDc>();
+            var response = new SingleResponse<DivisionDc>();
             try
             {
-                List<KeyValuePair<string, string>> responses = IsGradeExist(requestObj);
+                List<KeyValuePair<string, string>> responses = IsDivisionExist(requestObj);
                 if (responses.Count > 0)
                 {
                     response.Status = StatusCode.AlreadyExists;
@@ -36,12 +37,12 @@ namespace Pupil.Infrastructure.Services
                 }
                 else
                 {
-                    var tblGrade = _mapper.Map<Grade>(requestObj);
-                    _context.Grade.Add(tblGrade);
+                    var tblDivision = _mapper.Map<Division>(requestObj);
+                    _context.Division.Add(tblDivision);
                     await _context.SaveChangesAsync();
-                    requestObj.GradeId = tblGrade.GradeId;
+                    requestObj.DivisionId = tblDivision.DivisionId;
                     response.Status = StatusCode.Ok;
-                    response.Message = "Grade Successfully Created!";
+                    response.Message = "Division Successfully Created!";
                 }
                 response.Data = requestObj;
             }
@@ -59,8 +60,8 @@ namespace Pupil.Infrastructure.Services
             var response = new Response();
             try
             {
-                var grade = await _context.Grade.FindAsync(id);
-                _context.Grade.Remove(grade);
+                var division = await _context.Division.FindAsync(id);
+                _context.Division.Remove(division);
                 _context.SaveChanges();
                 response.Status = StatusCode.NoContent;
                 response.Message = "Successfully Deleted!";
@@ -74,17 +75,17 @@ namespace Pupil.Infrastructure.Services
             return response;
         }
 
-        public ListResponse<GradeDc> GetAllSync()
+        public ListResponse<DivisionDc> GetAllSync()
         {
-            var response = new ListResponse<GradeDc>();
+            var response = new ListResponse<DivisionDc>();
             try
             {
 
-                response.Data = _context.Grade.Select(x => new GradeDc
+                response.Data = _context.Division.Select(x => new DivisionDc
                 {
-                    GradeId = x.GradeId,
-                    Gname = x.Gname,
-                    Gdesc = x.Gdesc,
+                    DivisionId = x.DivisionId,
+                    DivisionName = x.Dname,
+                    DivisionDesc = x.Ddesc,
                     TenantId = x.TenantId
                 });
                 response.Status = StatusCode.Ok;
@@ -100,18 +101,19 @@ namespace Pupil.Infrastructure.Services
             return response;
         }
 
-        public async Task<SingleResponse<GradeDc>> GetByIdAsync(int id)
+        public async Task<SingleResponse<DivisionDc>> GetByIdAsync(int id)
         {
-            var response = new SingleResponse<GradeDc>();
+            var response = new SingleResponse<DivisionDc>();
             try
             {
-                response.Data = await _context.Grade.Select(x => new GradeDc
+                response.Data = await _context.Division.Select(x => new DivisionDc
                 {
-                    GradeId = x.GradeId,
-                    Gname = x.Gname,
-                    Gdesc = x.Gdesc,
+                    DivisionId = x.DivisionId,
+                    DivisionName = x.Dname,
+                    DivisionDesc = x.Ddesc,
                     TenantId = x.TenantId
-                }).FirstOrDefaultAsync(x => x.GradeId == id);
+                }).FirstOrDefaultAsync(x => x.DivisionId == id);
+
                 response.Status = StatusCode.Ok;
             }
             catch (Exception ex)
@@ -124,12 +126,12 @@ namespace Pupil.Infrastructure.Services
             return response;
         }
 
-        public async Task<SingleResponse<GradeDc>> UpdateAsync(GradeDc gradeDc)
+        public async Task<SingleResponse<DivisionDc>> UpdateAsync(DivisionDc divisionDc)
         {
-            var response = new SingleResponse<GradeDc>();
+            var response = new SingleResponse<DivisionDc>();
             try
             {
-                List<KeyValuePair<string, string>> responses = IsGradeExist(gradeDc);
+                List<KeyValuePair<string, string>> responses = IsDivisionExist(divisionDc);
                 if (responses.Count > 0)
                 {
                     response.Status = StatusCode.AlreadyExists;
@@ -137,15 +139,15 @@ namespace Pupil.Infrastructure.Services
                 }
                 else
                 {
-                    var grade = await _context.Grade.FindAsync(gradeDc.GradeId);
-                    grade.Gname = gradeDc.Gname;
-                    grade.Gdesc = gradeDc.Gdesc;
-                    _context.Grade.Update(grade);
+                    var division = await _context.Division.FindAsync(divisionDc.DivisionId);
+                    division.Dname = divisionDc.DivisionName;
+                    division.Ddesc = division.Ddesc;
+                    _context.Division.Update(division);
                     await _context.SaveChangesAsync();
                     response.Status = StatusCode.Ok;
-                    response.Message = "Grade Successfully Updated!";
+                    response.Message = "Division Successfully Updated!";
                 }
-                response.Data = gradeDc;
+                response.Data = divisionDc;
             }
             catch (Exception ex)
             {
@@ -157,24 +159,24 @@ namespace Pupil.Infrastructure.Services
             return response;
         }
 
-        private List<KeyValuePair<string, string>> IsGradeExist(GradeDc gradeDc)
+        private List<KeyValuePair<string, string>> IsDivisionExist(DivisionDc divisionDc)
         {
             List<KeyValuePair<string, string>> responses = new List<KeyValuePair<string, string>>();
             bool IsExists = false;
             try
             {
-                if (gradeDc.GradeId > 0)
+                if (divisionDc.DivisionId > 0)
                 {
-                    IsExists = _context.Grade.Where(x => x.Gname == gradeDc.Gname && x.GradeId != gradeDc.GradeId).Any();
+                    IsExists = _context.Division.Where(x => x.Dname == divisionDc.DivisionName && x.DivisionId != divisionDc.DivisionId).Any();
                 }
                 else
                 {
-                    IsExists = _context.Grade.Where(x => x.Gname == gradeDc.Gname).Any();
+                    IsExists = _context.Division.Where(x => x.Dname == divisionDc.DivisionName).Any();
                 }
 
                 if (IsExists)
                 {
-                    KeyValuePair<string, string> mesgStr = new KeyValuePair<string, string>("Key", "Grade already exists in the system.");
+                    KeyValuePair<string, string> mesgStr = new KeyValuePair<string, string>("Key", "Division already exists in the system.");
                     responses.Add(mesgStr);
                 }
             }
@@ -186,14 +188,14 @@ namespace Pupil.Infrastructure.Services
             return responses;
         }
 
-        public async Task<List<string>> GetGradesForExcel()
+        public async Task<List<string>> GetDivisionsForExcel()
         {
-            List<string> grades = new List<string>();
+            List<string> divisions = new List<string>();
             try
             {
-                foreach (Grade g in await _context.Grade.ToListAsync())
+                foreach (Division d in await _context.Division.ToListAsync())
                 {
-                    grades.Add(g.Gname + "-" + g.GradeId);
+                    divisions.Add(d.Dname+"-" + d.DivisionId);
                 }
 
             }
@@ -201,7 +203,7 @@ namespace Pupil.Infrastructure.Services
             {
 
             }
-            return grades;
+            return divisions;
         }
     }
 }

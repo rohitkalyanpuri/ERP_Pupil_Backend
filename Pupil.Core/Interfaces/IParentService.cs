@@ -17,5 +17,7 @@ namespace Pupil.Core.Interfaces
         Task<SingleResponse<ParentDc>> UpdateAsync(ParentDc parentDc);
 
         Task<ListResponse<ParentDc>> ImportParents(IEnumerable<ParentDc> requestObj);
+
+        Task<List<string>> GetParentsForExcel();
     }
 }

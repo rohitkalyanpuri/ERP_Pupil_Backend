@@ -263,5 +263,22 @@ namespace Pupil.Infrastructure.Services
             }
             return response;
         } 
+
+        public async Task<List<string>> GetParentsForExcel()
+        {
+            List<string> parents = new List<string>();
+            try
+            {
+                foreach(Parent p in await _context.Parent.ToListAsync())
+                {
+                    parents.Add(p.Fname + " " + p.Lname + "-" + p.ParentId);
+                }
+
+            }catch(Exception ex)
+            {
+
+            }
+            return parents;
+        }
     }
 }

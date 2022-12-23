@@ -15,5 +15,7 @@ namespace Pupil.Core.Interfaces
         Task<Response> Delete(int id);
 
         Task<SingleResponse<GradeDc>> UpdateAsync(GradeDc parentDc);
+
+        Task<List<string>> GetGradesForExcel();
     }
 }

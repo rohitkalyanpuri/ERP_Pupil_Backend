@@ -31,6 +31,7 @@ namespace Pupil.WebApi.Extensions
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IGradeService, GradeService>();
             services.AddTransient<IDivisionService, DivisionService>();
+            services.AddTransient<IAcademicYearService, AcademicYearService>();
             return services;
         }
     }

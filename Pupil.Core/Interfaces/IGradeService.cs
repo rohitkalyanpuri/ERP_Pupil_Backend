@@ -9,12 +9,12 @@ namespace Pupil.Core.Interfaces
 {
     public interface IGradeService
     {
-        Task<SingleResponse<GradeDc>> CreateAsync(GradeDc parentDc);
+        Task<SingleResponse<GradeDc>> CreateAsync(GradeDc gradeDc);
         ListResponse<GradeDc> GetAllSync();
         Task<SingleResponse<GradeDc>> GetByIdAsync(int id);
         Task<Response> Delete(int id);
 
-        Task<SingleResponse<GradeDc>> UpdateAsync(GradeDc parentDc);
+        Task<SingleResponse<GradeDc>> UpdateAsync(GradeDc gradeDc);
 
         Task<List<string>> GetGradesForExcel();
     }

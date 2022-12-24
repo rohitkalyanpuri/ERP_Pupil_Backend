@@ -22,6 +22,9 @@ namespace Pupil.Core
 
             CreateMap<DivisionDc, Division>().ForMember(c=>c.Ddesc,opt=>opt.MapFrom(x=>x.DivisionDesc))
                 .ForMember(c=>c.Dname, opt=>opt.MapFrom(x=>x.DivisionName));
+
+            CreateMap<AcademicYearDc, AcademicYear>();
+            CreateMap<EnrollmentDc, Enrollment>();
         }
     }
 }

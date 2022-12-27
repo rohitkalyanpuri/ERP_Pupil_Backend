@@ -18,5 +18,9 @@
     <ProjectReference Include="..\Pupil.Infrastructure\Pupil.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Files\SpreadSheets\" />
+  </ItemGroup>
+
 
 </Project>

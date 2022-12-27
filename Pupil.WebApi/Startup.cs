@@ -64,6 +64,7 @@ namespace Pupil.WebApi
                 .AllowCredentials()); // allow credentials
             app.UseHttpsRedirection();
             app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthorization();

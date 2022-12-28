@@ -59,32 +59,35 @@ namespace Pupil.WebApi.Controllers
                     var validDivisionOptions = $"\"{String.Join(",", Divisionoptions)}\"";
                     var validAcademicOptions = $"\"{String.Join(",", Academicoptions)}\"";
 
+                    //Enrollment Date
+                    worksheet.Range("E2:E500").Value = "'mm/dd/yyyy";
+
                     //Academics
-                    worksheet.Range("E2:E500").SetDataValidation().IgnoreBlanks = true;
-                    worksheet.Range("E2:E500").SetDataValidation().InCellDropdown = true;
-                    worksheet.Range("E2:E500").Value = "---";
-                    worksheet.Range("E2:E500").SetDataValidation().List(validAcademicOptions, true);
-
-
-                    //Grades
                     worksheet.Range("F2:F500").SetDataValidation().IgnoreBlanks = true;
                     worksheet.Range("F2:F500").SetDataValidation().InCellDropdown = true;
                     worksheet.Range("F2:F500").Value = "---";
-                    worksheet.Range("F2:F500").SetDataValidation().List(validGradeOptions, true);
+                    worksheet.Range("F2:F500").SetDataValidation().List(validAcademicOptions, true);
 
 
-                    //Division
+                    //Grades
                     worksheet.Range("G2:G500").SetDataValidation().IgnoreBlanks = true;
                     worksheet.Range("G2:G500").SetDataValidation().InCellDropdown = true;
                     worksheet.Range("G2:G500").Value = "---";
-                    worksheet.Range("G2:G500").SetDataValidation().List(validDivisionOptions, true);
+                    worksheet.Range("G2:G500").SetDataValidation().List(validGradeOptions, true);
 
 
-                    //Parent
+                    //Division
                     worksheet.Range("H2:H500").SetDataValidation().IgnoreBlanks = true;
                     worksheet.Range("H2:H500").SetDataValidation().InCellDropdown = true;
                     worksheet.Range("H2:H500").Value = "---";
-                    worksheet.Range("H2:H500").SetDataValidation().List(validParentOptions, true);
+                    worksheet.Range("H2:H500").SetDataValidation().List(validDivisionOptions, true);
+
+
+                    //Parent
+                    worksheet.Range("I2:I500").SetDataValidation().IgnoreBlanks = true;
+                    worksheet.Range("I2:I500").SetDataValidation().InCellDropdown = true;
+                    worksheet.Range("I2:I500").Value = "---";
+                    worksheet.Range("I2:I500").SetDataValidation().List(validParentOptions, true);
 
                     var rootFolder = Path.Combine(_WebHostEnvironment.WebRootPath, "Files/SpreadSheets"); ;
                     string AutoKey = Guid.NewGuid().ToString("N").Substring(0, 8);
@@ -123,15 +126,16 @@ namespace Pupil.WebApi.Controllers
             //Setiing Table Name  
             dt.TableName = "StudentData";
             //Add Columns  
-            dt.Columns.Add("Name", typeof(string));
-            dt.Columns.Add("Phone Number", typeof(string));
-            dt.Columns.Add("Enrollment ID", typeof(string));
-            dt.Columns.Add("Enrollment Date", typeof(string));
-            dt.Columns.Add("AcademicYear-AcademicID", typeof(string));
-            dt.Columns.Add("Grade-GradeID", typeof(string));
-            dt.Columns.Add("Division-DivisionID", typeof(string));
-            dt.Columns.Add("Parent-ParentID", typeof(string));
-            dt.Columns.Add("Parent Parent Number", typeof(string));
+            dt.Columns.Add("FirstName", typeof(string));
+            dt.Columns.Add("LastName", typeof(string));
+            dt.Columns.Add("Phone_Number", typeof(string));
+            dt.Columns.Add("Enrollment_ID", typeof(string));
+            dt.Columns.Add("Enrollment_Date", typeof(string));
+            dt.Columns.Add("AcademicYear_AcademicID", typeof(string));
+            dt.Columns.Add("Grade_GradeID", typeof(string));
+            dt.Columns.Add("Division_DivisionID", typeof(string));
+            dt.Columns.Add("Parent_ParentID", typeof(string));
+            dt.Columns.Add("Parent_Parent_Number", typeof(string));
             
             //Add Rows in DataTable  
             //dt.Rows.Add(1, "Anoop Kumar Sharma", "Delhi");

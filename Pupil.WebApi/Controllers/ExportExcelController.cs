@@ -59,35 +59,39 @@ namespace Pupil.WebApi.Controllers
                     var validDivisionOptions = $"\"{String.Join(",", Divisionoptions)}\"";
                     var validAcademicOptions = $"\"{String.Join(",", Academicoptions)}\"";
 
+                    //Date Of Birth
+                    worksheet.Range("C2:C500").Value = "'mm/dd/yyyy";
+
+
                     //Enrollment Date
-                    worksheet.Range("E2:E500").Value = "'mm/dd/yyyy";
+                    worksheet.Range("F2:F500").Value = "'mm/dd/yyyy";
 
-                    //Academics
-                    worksheet.Range("F2:F500").SetDataValidation().IgnoreBlanks = true;
-                    worksheet.Range("F2:F500").SetDataValidation().InCellDropdown = true;
-                    worksheet.Range("F2:F500").Value = "---";
-                    worksheet.Range("F2:F500").SetDataValidation().List(validAcademicOptions, true);
-
-
-                    //Grades
+                    //AcademicYear_AcademicID
                     worksheet.Range("G2:G500").SetDataValidation().IgnoreBlanks = true;
                     worksheet.Range("G2:G500").SetDataValidation().InCellDropdown = true;
                     worksheet.Range("G2:G500").Value = "---";
-                    worksheet.Range("G2:G500").SetDataValidation().List(validGradeOptions, true);
+                    worksheet.Range("G2:G500").SetDataValidation().List(validAcademicOptions, true);
 
 
-                    //Division
+                    //Grade_GradeID
                     worksheet.Range("H2:H500").SetDataValidation().IgnoreBlanks = true;
                     worksheet.Range("H2:H500").SetDataValidation().InCellDropdown = true;
                     worksheet.Range("H2:H500").Value = "---";
-                    worksheet.Range("H2:H500").SetDataValidation().List(validDivisionOptions, true);
+                    worksheet.Range("H2:H500").SetDataValidation().List(validGradeOptions, true);
 
 
-                    //Parent
+                    //Division
                     worksheet.Range("I2:I500").SetDataValidation().IgnoreBlanks = true;
                     worksheet.Range("I2:I500").SetDataValidation().InCellDropdown = true;
                     worksheet.Range("I2:I500").Value = "---";
-                    worksheet.Range("I2:I500").SetDataValidation().List(validParentOptions, true);
+                    worksheet.Range("I2:I500").SetDataValidation().List(validDivisionOptions, true);
+
+
+                    //Parent
+                    worksheet.Range("J2:J500").SetDataValidation().IgnoreBlanks = true;
+                    worksheet.Range("J2:J500").SetDataValidation().InCellDropdown = true;
+                    worksheet.Range("J2:J500").Value = "---";
+                    worksheet.Range("J2:J500").SetDataValidation().List(validParentOptions, true);
 
                     var rootFolder = Path.Combine(_WebHostEnvironment.WebRootPath, "Files/SpreadSheets"); ;
                     string AutoKey = Guid.NewGuid().ToString("N").Substring(0, 8);
@@ -126,17 +130,18 @@ namespace Pupil.WebApi.Controllers
             //Setiing Table Name  
             dt.TableName = "StudentData";
             //Add Columns  
-            dt.Columns.Add("FirstName", typeof(string));
-            dt.Columns.Add("LastName", typeof(string));
-            dt.Columns.Add("Phone_Number", typeof(string));
-            dt.Columns.Add("Enrollment_ID", typeof(string));
-            dt.Columns.Add("Enrollment_Date", typeof(string));
-            dt.Columns.Add("AcademicYear_AcademicID", typeof(string));
-            dt.Columns.Add("Grade_GradeID", typeof(string));
-            dt.Columns.Add("Division_DivisionID", typeof(string));
-            dt.Columns.Add("Parent_ParentID", typeof(string));
-            dt.Columns.Add("Parent_Parent_Number", typeof(string));
-            
+            dt.Columns.Add("FirstName", typeof(string));//Column-A
+            dt.Columns.Add("LastName", typeof(string));//Column-B
+            dt.Columns.Add("DateOfBirth", typeof(string));//Column-C
+            dt.Columns.Add("Phone_Number", typeof(string));//Column-D
+            dt.Columns.Add("Enrollment_ID", typeof(string));//Column-E
+            dt.Columns.Add("Enrollment_Date", typeof(string));//Column-F
+            dt.Columns.Add("AcademicYear_AcademicID", typeof(string));//Column-G
+            dt.Columns.Add("Grade_GradeID", typeof(string));//Column-H
+            dt.Columns.Add("Division_DivisionID", typeof(string));//Column-I
+            dt.Columns.Add("Parent_ParentID", typeof(string));//Column-J
+            dt.Columns.Add("Parent_Parent_Number", typeof(string));//Column-K
+
             //Add Rows in DataTable  
             //dt.Rows.Add(1, "Anoop Kumar Sharma", "Delhi");
             //dt.Rows.Add(2, "Andrew", "U.P.");

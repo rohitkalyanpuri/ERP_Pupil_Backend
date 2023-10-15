@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Pupil.Core.DataContactsEntities;
-using Pupil.Core.DataTransferObjects;
-using Pupil.Core.Interfaces;
+using Pupil.Model;
+using Pupil.Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,21 +17,19 @@ namespace Pupil.WebApi.Controllers
     [ApiController]
     public class ExportExcelController : ControllerBase
     {
-        private readonly IParentService _parentService;
-        private readonly IGradeService _gradeService;
-        private readonly IDivisionService _divisionService;
-        private readonly IAcademicYearService _academicYearService;
-        private readonly ITenantService _tenantService;
+        private readonly ParentService _parentService;
+        private readonly GradeService _gradeService;
+        private readonly DivisionService _divisionService;
+        private readonly AcademicYearService _academicYearService;
         private IWebHostEnvironment _WebHostEnvironment;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ExportExcelController(IWebHostEnvironment webHostEnvironment,IParentService parentService, IGradeService gradeService,
-            IDivisionService divisionService, IAcademicYearService academicYearService, ITenantService tenantService, IHttpContextAccessor httpContextAccessor)
+        public ExportExcelController(IWebHostEnvironment webHostEnvironment,ParentService parentService, GradeService gradeService,
+            DivisionService divisionService, AcademicYearService academicYearService,  IHttpContextAccessor httpContextAccessor)
         {
             _parentService = parentService;
             _gradeService = gradeService;
             _divisionService = divisionService;
             _academicYearService = academicYearService;
-            _tenantService = tenantService;
             _WebHostEnvironment = webHostEnvironment;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -95,7 +91,7 @@ namespace Pupil.WebApi.Controllers
 
                     var rootFolder = Path.Combine(_WebHostEnvironment.WebRootPath, "Files/SpreadSheets"); ;
                     string AutoKey = Guid.NewGuid().ToString("N").Substring(0, 8);
-                    string fileName = "StudentImportFilePupil_" + _tenantService.GetTenant()?.TID + ".xlsx";
+                    string fileName = "StudentImportFilePupil.xlsx";
                     var filePath = Path.Combine(rootFolder, fileName);
                     var fileLocation = new FileInfo(filePath);
                     string host = _httpContextAccessor.HttpContext.Request.Host.Value;
@@ -106,7 +102,7 @@ namespace Pupil.WebApi.Controllers
                     {
                         wb.SaveAs(filePath);
                         response.Message = aLink;
-                        response.Status = Pupil.Core.Enums.StatusCode.Ok;
+                        response.Status = Pupil.Model.StatusCode.Ok;
                         //Return xlsx Excel File  
                         //return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                         //return Ok(filePath);
@@ -116,7 +112,7 @@ namespace Pupil.WebApi.Controllers
             catch(Exception ex)
             {
                 response.Message = "";
-                response.Status = Pupil.Core.Enums.StatusCode.SystemException;
+                response.Status = Pupil.Model.StatusCode.SystemException;
                 response.Error = ex.Message.ToString();
             }
 

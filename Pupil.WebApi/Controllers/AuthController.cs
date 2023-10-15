@@ -1,25 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Pupil.Core.DataTransferObjects;
-using Pupil.Core.Entities;
-using Pupil.Core.Interfaces;
+using Pupil.Model;
 using System.Threading.Tasks;
 
-namespace Pupil.WebApi.Controllers
+namespace Pupil.Web.Controllers
 {
     [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthenticationService _service;
+        private readonly Pupil.Services.PupilAuthenticationService _service;
 
-        public AuthController(IAuthenticationService service)
+        public AuthController(Pupil.Services.PupilAuthenticationService service)
         {
             _service = service;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AuthenticateUser(AuthDc request)
+        public async Task<IActionResult> AuthenticateUser([FromBody]AuthDc request)
         {
             return Ok(await _service.AuthenticateUser(request));
         }

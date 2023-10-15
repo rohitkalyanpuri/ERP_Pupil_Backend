@@ -1,41 +1,48 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Pupil.Core.DataTransferObjects;
-using Pupil.Core.Interfaces;
+using Pupil.Model;
+using Pupil.Services;
 using System.Threading.Tasks;
 
-namespace Pupil.WebApi.Controllers
+namespace Pupil.Web.Controllers
 {
     [Route("api/academic")]
     [ApiController]
     public class AcademicYearController : ControllerBase
     {
-        private readonly IAcademicYearService _service;
+        private readonly AcademicYearService _service;
 
-        public AcademicYearController(IAcademicYearService service)
+        public AcademicYearController(AcademicYearService service)
         {
             _service = service;
         }
 
         [HttpGet, Route("getacademiclist")]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var grades = _service.GetAllSync();
-            return Ok(grades);
+            var academics = await _service.GetAllASync();
+            return Ok(academics);
+        }
+
+        [HttpGet, Route("gettobindtodropdown")]
+        public async Task<IActionResult> GetBindAsync()
+        {
+            var academics = await _service.GetBindAsync();
+            return Ok(academics);
         }
 
         [HttpPost, Route("addacademic")]
         public async Task<IActionResult> Add(AcademicYearDc academicYearDc)
         {
-            var gradeDetails = await _service.CreateAsync(academicYearDc);
-            return Ok(gradeDetails);
+            var academicetails = await _service.CreateAsync(academicYearDc);
+            return Ok(academicetails);
         }
 
         [HttpPut, Route("editacademic")]
         public async Task<IActionResult> Update(AcademicYearDc academicYearDc)
         {
-            var gradeDetails = await _service.UpdateAsync(academicYearDc);
-            return Ok(gradeDetails);
+            var academicetails = await _service.UpdateAsync(academicYearDc);
+            return Ok(academicetails);
         }
 
         [HttpDelete, Route("deleteacademic/{id:int}")]

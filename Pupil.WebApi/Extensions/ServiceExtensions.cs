@@ -1,37 +1,47 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using Pupil.Core.Interfaces;
-using Pupil.Infrastructure.Services;
-using Pupil.WebApi.Filters;
+﻿using DocumentFormat.OpenXml.InkML;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Pupil.DataLayer;
+using Pupil.Services;
 
-namespace Pupil.WebApi.Extensions
+namespace Pupil.Web.Extensions
 {
     public static class ServiceExtensions
     {
         public static void ConfigureCors(this IServiceCollection services)
            => services.AddCors(options =>
            {
-               options.AddPolicy("CorsPolicy", builder =>
-               builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+               options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
            });
-        //Swagger
-        public static void ConfigureSwagger(this IServiceCollection services)
-        {
-            services.AddSwaggerGen(s => {
-                s.SwaggerDoc("v1", new OpenApiInfo { Title = "Code Pupil API", Version = "v1" });
-                s.OperationFilter<SwaggerFilter>();
+        public static void ConfigureIISIntegration(this IServiceCollection services) =>
+            services.Configure<IISOptions>(options =>
+            {
             });
-        }
+        //public static void ConfigureLoggerService(this IServiceCollection services)
+        //    => services.AddScoped<ILoggerManager, LoggerManager>();
+        public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
+            => services.AddDbContext<DBContext>(opts =>
+            opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+
         public static IServiceCollection AddCustomServices(this IServiceCollection services)
         {
-            services.AddTransient<ITenantService, TenantService>();
-            services.AddTransient<IExamTypeService, ExamTypeService>();
-            services.AddTransient<IParentService, ParentService>();
-            services.AddTransient<IStudentService, StudentService>();
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
-            services.AddTransient<IGradeService, GradeService>();
-            services.AddTransient<IDivisionService, DivisionService>();
-            services.AddTransient<IAcademicYearService, AcademicYearService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddTransient(typeof(ParentService), typeof(ParentService));
+            services.AddTransient(typeof(PupilAuthenticationService), typeof(PupilAuthenticationService));
+            services.AddTransient(typeof(GradeService), typeof(GradeService));
+            services.AddTransient(typeof(AcademicYearService), typeof(AcademicYearService));
+            services.AddTransient(typeof(DivisionService), typeof(DivisionService));
+            services.AddTransient(typeof(EnrollmentService), typeof(EnrollmentService));
+            services.AddTransient(typeof(ExamTypeService), typeof(ExamTypeService));
+            services.AddTransient(typeof(StudentService), typeof(StudentService));
+            services.AddTransient(typeof(CourseService), typeof(CourseService));
+            services.AddTransient(typeof(FeeTypeService), typeof(FeeTypeService));
+            services.AddTransient(typeof(FeeStructureService), typeof(FeeStructureService));
+
             return services;
         }
     }

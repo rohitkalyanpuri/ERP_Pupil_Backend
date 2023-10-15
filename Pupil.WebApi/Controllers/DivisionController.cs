@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Pupil.Core.DataTransferObjects;
-using Pupil.Core.Interfaces;
+using Pupil.Model;
+using Pupil.Services;
 using System.Threading.Tasks;
 
 namespace Pupil.WebApi.Controllers
@@ -10,20 +10,26 @@ namespace Pupil.WebApi.Controllers
     [ApiController]
     public class DivisionController : ControllerBase
     {
-        private readonly IDivisionService _service;
+        private readonly DivisionService _service;
 
-        public DivisionController(IDivisionService service)
+        public DivisionController(DivisionService service)
         {
             _service = service;
         }
 
         [HttpGet, Route("getdivisionlist")]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var divisions = _service.GetAllSync();
+            var divisions = await _service.GetAllAsync();
             return Ok(divisions);
         }
 
+        [HttpGet, Route("gettobindtodropdown")]
+        public async Task<IActionResult> GetBindGradeASync()
+        {
+            var divions = await _service.GetDivisonsToBind();
+            return Ok(divions);
+        }
         [HttpPost, Route("adddivision")]
         public async Task<IActionResult> Add(DivisionDc divisionDc)
         {

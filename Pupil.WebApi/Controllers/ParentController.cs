@@ -1,28 +1,33 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Pupil.Core.DataContactsEntities;
-using Pupil.Core.Interfaces;
-using System;
+using Pupil.Model;
+using Pupil.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Pupil.WebApi.Controllers
+namespace Pupil.Web.Controllers
 {
     [Route("api/parent")]
     [ApiController]
     public class ParentController : ControllerBase
     {
-        private readonly IParentService _service;
-
-        public ParentController(IParentService service)
+        private readonly ParentService _service;
+        public ParentController(ParentService service)
         {
             _service = service;
         }
 
-        [HttpGet,Route("getparentslist")]
-        public IActionResult Get()
+        [HttpGet, Route("getparentslist")]
+        public async Task<IActionResult> Get()
         {
-            var parents =  _service.GetAllSync();
+            var parents = await _service.GetAllAsync();
+            return Ok(parents);
+        }
+
+        [HttpGet, Route("gettobindtodropdown")]
+        public async Task<IActionResult> GetBindParentAsync()
+        {
+            var parents = await _service.GetBindParentAsync();
             return Ok(parents);
         }
 

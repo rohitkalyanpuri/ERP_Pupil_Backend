@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Pupil.Core.Entities;
-using Pupil.Core.Interfaces;
+using Pupil.Model;
+using Pupil.Services;
 using System.Threading.Tasks;
 
 namespace Pupil.WebApi.Controllers
@@ -10,9 +10,9 @@ namespace Pupil.WebApi.Controllers
     [ApiController]
     public class ExamTypeController : ControllerBase
     {
-        private readonly IExamTypeService _service;
+        private readonly ExamTypeService _service;
 
-        public ExamTypeController(IExamTypeService service)
+        public ExamTypeController(ExamTypeService service)
         {
             _service = service;
         }
